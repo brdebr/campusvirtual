@@ -1447,24 +1447,32 @@ GradebookSpreadsheet.prototype.setupMenusAndPopovers = function() {
 
 function createNewGradebookItemPopover(){
     var $newPopoverColumn = $('.gb-just-created');
-    var assignmentid = parseInt($newPopoverColumn.attr('data-assignmentid'));
-    var $newPopover = $('[data-assignmentid='+assignmentid+']').not('div').first();
-    
-    $newPopover.attr('data-toggle', 'popover');
-    $newPopover.attr('data-placement', 'top');
-    $newPopover.attr('data-container', 'body');
-    $newPopover.attr('data-title', $('#labelNewGradeItemPopoverTitle').text());
-    $newPopover.attr('data-content', $('#labelNewGradeItemPopoverMessage').text());
-    
-    $newPopover.popover();
-    $newPopover.popover('show'); 
-    $('body').on('click', function (e) {
-        if ($(e.target).data('toggle') !== 'popover'
-            && $(e.target).parents('.popover.in').length === 0) { 
-            $newPopover.popover('destroy');
-            $newPopover.attr('data-toggle','');
-        }
-    });
+    if($newPopoverColumn.length > 0){
+      var assignmentid = parseInt($newPopoverColumn.attr('data-assignmentid'));
+      var $newPopover = $('[data-assignmentid='+assignmentid+']').not('div').first();
+      
+      $newPopover.attr('data-toggle','popover');
+      $newPopover.attr('data-placement','top');
+      $newPopover.attr('data-container','body');
+      $newPopover.attr('data-title',$('#labelNewGradeItemPopoverTitle').text());
+      $newPopover.attr('data-content',$('#labelNewGradeItemPopoverMessage').text());
+      
+      $newPopover.popover();
+      $newPopover.popover('show'); 
+      $('body').on('click', function (e) {
+          if ($(e.target).data('toggle') !== 'popover'
+              && $(e.target).parents('.popover.in').length === 0) { 
+              $newPopover.popover('destroy');
+              $newPopover.attr('data-toggle','');
+          }
+      });
+      $popoverEl = $('.popover');
+      if($popoverEl !== undefined || $popoverEl.length < 0){
+        var topPosValue = parseInt($popoverEl.css('top').replace('px',''));
+        topPosValue += 5;
+        $popoverEl.css('top',topPosValue+'px');
+      }
+    }
 }
 
 GradebookSpreadsheet.prototype.enablePopovers = function($target) {
